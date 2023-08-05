@@ -2,7 +2,11 @@ const express = require('express');
 const UserModel = require('../src/models/user.model');
 
 const app = express();
+const port = 3010;
 app.use(express.json());
+
+app.set('view engine', 'ejs');
+app.set('views', 'src/views');
 
 app.use((req, res, next) => {
   console.log('====================================================');
@@ -13,7 +17,12 @@ app.use((req, res, next) => {
 
   next();
 });
-const port = 3010;
+
+// Renderizando "users" em arquivo HTML estilizado.
+app.get('/views/users', async (req, res) => {
+  const users = await UserModel.find({});
+  res.render('index', { users });
+});
 
 app.get('/users', async (req, res) => {
   try {
