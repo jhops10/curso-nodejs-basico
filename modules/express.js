@@ -33,4 +33,27 @@ app.post('/users', async (require, response) => {
   }
 });
 
+app.patch('/users/:id', async (require, response) => {
+  try {
+    const id = require.params.id;
+    const user = await UserModel.findByIdAndUpdate(id, require.body, {
+      new: true,
+    });
+
+    return response.status(200).json(user);
+  } catch (error) {
+    response.status(500).send(error.message);
+  }
+});
+
+app.delete('/users/:id', async (require, response) => {
+  try {
+    const id = require.params.id;
+    const user = await UserModel.findByIdAndRemove(id);
+    response.status(200).json(user);
+  } catch (error) {
+    response.status(500).send(error.message);
+  }
+});
+
 app.listen(port, () => console.log(`Rodando com Express na porta ${port}`));
